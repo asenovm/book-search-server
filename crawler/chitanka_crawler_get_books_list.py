@@ -15,7 +15,7 @@ def init_make_request():
     queries_for_last_minute = 0
     queries_for_last_hour = 0
     conn = sqlite3.connect('chitanka.db')
-
+    
 def make_request(req):
     global last_minute
     global last_hour
@@ -46,8 +46,8 @@ def make_request(req):
     
     proxy = {'http': 'http://93.123.45.23:8008'}
     
-    r = requests.get(req, proxies = proxy)
-    #r = requests.get(req)
+    #r = requests.get(req, proxies = proxy)
+    r = requests.get(req)
     
     return r
 
