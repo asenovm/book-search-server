@@ -1,0 +1,12 @@
+package edu.fmi.ir.booksearch.model;
+
+public class Book {
+
+	private final String title;
+
+	private final String imagePath;
+
+	public Book(final String title, final String imagePath) {
+
+	}
+}

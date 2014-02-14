@@ -1,0 +1,10 @@
+package edu.fmi.ir.booksearch;
+
+public class BookSearcher {
+	public static void main(String[] args) {
+		final String searchPhrase = args[0]; // change to 1
+
+		final BookSearcher searcher = new BookSearcher();
+		searcher.getMatches("test");
+	}
+}
