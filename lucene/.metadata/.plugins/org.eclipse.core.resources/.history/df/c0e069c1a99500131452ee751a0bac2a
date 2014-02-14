@@ -1,0 +1,94 @@
+package edu.fmi.ir.booksearch;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Scanner;
+
+import org.apache.lucene.analysis.standard.StandardAnalyzer;
+import org.apache.lucene.document.Document;
+import org.apache.lucene.document.Field;
+import org.apache.lucene.document.TextField;
+import org.apache.lucene.index.DirectoryReader;
+import org.apache.lucene.index.IndexWriter;
+import org.apache.lucene.index.IndexWriterConfig;
+import org.apache.lucene.queryparser.classic.QueryParser;
+import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.Query;
+import org.apache.lucene.search.ScoreDoc;
+import org.apache.lucene.search.TopScoreDocCollector;
+import org.apache.lucene.store.RAMDirectory;
+import org.apache.lucene.util.Version;
+
+import edu.fmi.ir.booksearch.model.Book;
+
+public class BookIndex {
+
+	private final IndexWriter writer;
+
+	private static final String FIELD_CONTENT = "content";
+
+	private final List<Book> indexedBooks;
+
+	public BookIndex() throws IOException {
+		final RAMDirectory indexDirectory = new RAMDirectory();
+		final IndexWriterConfig config = new IndexWriterConfig(
+				Version.LUCENE_46, new StandardAnalyzer(Version.LUCENE_46));
+		writer = new IndexWriter(indexDirectory, config);
+		indexedBooks = new ArrayList<Book>();
+	}
+
+	public void index(final String title, final String bookPath) {
+		final Document document = new Document();
+		try {
+			final Scanner scanner = new Scanner(new File(bookPath));
+			final StringBuilder builder = new StringBuilder();
+			while (scanner.hasNextLine()) {
+				builder.append(scanner.nextLine());
+			}
+			document.add(new TextField(FIELD_CONTENT, builder.toString(),
+					Field.Store.YES));
+			writer.addDocument(document);
+			indexedBooks.add(new Book(title));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void indexDirectory(final String directoryPath) {
+		final File directory = new File(directoryPath);
+		final String[] filenames = directory.list();
+		for (final String filename : filenames) {
+			index(filename.substring(0, filename.lastIndexOf(".")),
+					directoryPath + File.separator + filename);
+		}
+	}
+
+	public Map<Book, Float> query(final String queryString) {
+		final Map<Book, Float> result = new HashMap<Book, Float>();
+		try {
+			final StandardAnalyzer analyzer = new StandardAnalyzer(
+					Version.LUCENE_46);
+			final QueryParser parser = new QueryParser(Version.LUCENE_46,
+					FIELD_CONTENT, analyzer);
+			final Query query = parser.parse(queryString);
+			final TopScoreDocCollector collector = TopScoreDocCollector.create(
+					10, true);
+
+			final IndexSearcher searcher = new IndexSearcher(
+					DirectoryReader.open(writer, false));
+			searcher.search(query, collector);
+
+			final ScoreDoc[] scoreDocs = collector.topDocs().scoreDocs;
+			for (final ScoreDoc doc : scoreDocs) {
+				result.put(indexedBooks.get(doc.doc), doc.score);
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return result;
+	}
+}

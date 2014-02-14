@@ -1,24 +1,29 @@
 package edu.fmi.ir.booksearch;
 
-import java.util.Map;
+import java.io.IOException;
 
-import edu.fmi.ir.booksearch.model.Book;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 public class BookSearcher {
 
-	public void index(final String directoryPath) {
-		try {
-			final BookIndex index = new BookIndex();
-			index.indexDirectory(directoryPath);
-			final Map<Book, Float> result = index.query("отиде там");
-			System.out.println(result);
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
+	private BookIndex index;
+
+	public void index(final String directoryPath) throws IOException {
+		index = new BookIndex();
+		index.indexDirectory(directoryPath);
 	}
 
-	public static void main(String[] args) {
+	public String query(final String query) {
+		final JSONArray result = index.query(query);
+		final JSONObject resultJson = new JSONObject();
+		resultJson.put("books", result);
+		return resultJson.toString();
+	}
+
+	public static void main(String[] args) throws IOException {
 		final BookSearcher searcher = new BookSearcher();
-		searcher.index("../books");
+		searcher.index(args[0]);
+		System.out.println(searcher.query(args[1]));
 	}
 }

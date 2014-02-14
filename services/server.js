@@ -1,5 +1,8 @@
 var express = require('express'),
-    app = express();
+    app = express(),
+    child_process = require('child_process');
+
+app.use(express.bodyParser());
 
 app.use(function (req, res, next) {
    res.header("Access-Control-Allow-Origin", "http://localhost:9000");
@@ -9,25 +12,15 @@ app.use(function (req, res, next) {
    next();
 });
 
-app.get('/search', function (req, res) {
-    res.json({
-        "books": [
-            {
-                "title": "Sherlock Holmes",
-                "image": "http://example.com/image.png",
-                "relevance": "0.77"
-            }, {
-                "title": "Withering Heights",
-                "image": "http://example.com/image2.png",
-                "relevance": "0.54"
-            }, {
-                "title": "The Picture of Dorian Gray",
-                "image": "http://example.com/image3.png",
-                "relevance": "0.36"
-            }   
-        ]
+app.post('/search', function (req, res) {
+    console.log(req.body.q);
+    child_process.exec('java -jar ../search/search.jar ../search/books ' + req.body.q, function(err, stdout, stderr) {
+        if(err) {
+            res.send(500); 
+        } else {
+            res.send(stdout);
+        }
     });
-    res.send(200);
 });
 
 app.listen(8080);

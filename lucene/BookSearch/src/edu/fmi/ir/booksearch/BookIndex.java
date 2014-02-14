@@ -3,9 +3,7 @@ package edu.fmi.ir.booksearch;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Scanner;
 
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
@@ -22,6 +20,8 @@ import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TopScoreDocCollector;
 import org.apache.lucene.store.RAMDirectory;
 import org.apache.lucene.util.Version;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import edu.fmi.ir.booksearch.model.Book;
 
@@ -67,8 +67,8 @@ public class BookIndex {
 		}
 	}
 
-	public Map<Book, Float> query(final String queryString) {
-		final Map<Book, Float> result = new HashMap<Book, Float>();
+	public JSONArray query(final String queryString) {
+		final JSONArray result = new JSONArray();
 		try {
 			final StandardAnalyzer analyzer = new StandardAnalyzer(
 					Version.LUCENE_46);
@@ -84,7 +84,10 @@ public class BookIndex {
 
 			final ScoreDoc[] scoreDocs = collector.topDocs().scoreDocs;
 			for (final ScoreDoc doc : scoreDocs) {
-				result.put(indexedBooks.get(doc.doc), doc.score);
+				final JSONObject docJson = new JSONObject();
+				docJson.put("title", indexedBooks.get(doc.doc));
+				docJson.put("relevance", doc.score);
+				result.put(docJson);
 			}
 		} catch (Exception ex) {
 			ex.printStackTrace();
