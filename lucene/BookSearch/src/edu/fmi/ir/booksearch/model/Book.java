@@ -6,6 +6,10 @@ public class Book {
 
 	private final String imagePath;
 
+	public Book(final String title) {
+		this(title, "");
+	}
+
 	public Book(final String title, final String imagePath) {
 		this.title = title;
 		this.imagePath = imagePath;
@@ -18,4 +22,10 @@ public class Book {
 	public String getImagePath() {
 		return imagePath;
 	}
+
+	@Override
+	public String toString() {
+		return title;
+	}
+
 }

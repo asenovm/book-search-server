@@ -1,6 +1,7 @@
 INDEX VERSION 1.126+/home/martin/workspace/book-search-server/lucene/.metadata/.plugins/org.eclipse.jdt.core
-1159935248.index
+3937884183.index
 3422508414.index
+2081065217.index
 2853195236.index
 2898480234.index
 2683054613.index
@@ -9,9 +10,8 @@ INDEX VERSION 1.126+/home/martin/workspace/book-search-server/lucene/.metadata/.
 3026781196.index
 987731859.index
 262802227.index
-3851585071.index
 2456322530.index
 1230503809.index
 3721354332.index
 417373247.index
-3937884183.index
+1159935248.index

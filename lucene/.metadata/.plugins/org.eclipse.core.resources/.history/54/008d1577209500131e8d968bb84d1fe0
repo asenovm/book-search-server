@@ -1,0 +1,19 @@
+package edu.fmi.ir.booksearch;
+
+public class BookSearcher {
+
+	public void index(final String directoryPath) {
+		try {
+			final BookIndex index = new BookIndex();
+			index.indexDirectory(directoryPath);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+	}
+
+	public static void main(String[] args) {
+		final BookSearcher searcher = new BookSearcher();
+		System.getProperty("user.dir");
+		searcher.index("books");
+	}
+}

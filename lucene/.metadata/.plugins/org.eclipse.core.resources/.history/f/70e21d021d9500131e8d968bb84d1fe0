@@ -1,0 +1,14 @@
+package edu.fmi.ir.booksearch;
+
+import java.util.LinkedList;
+import java.util.List;
+
+import edu.fmi.ir.booksearch.model.Book;
+
+public class JsonReader {
+	public List<Book> read(final String jsonData) {
+		final List<Book> result = new LinkedList<Book>();
+
+		return result;
+	}
+}

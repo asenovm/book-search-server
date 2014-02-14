@@ -1,0 +1,9 @@
+package edu.fmi.ir.booksearch;
+
+public class BookIndex {
+
+	public void index(final String title, final String coverPath,
+			final String bookPath) {
+
+	}
+}

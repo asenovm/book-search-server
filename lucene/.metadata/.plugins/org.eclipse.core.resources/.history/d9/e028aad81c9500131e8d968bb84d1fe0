@@ -1,0 +1,7 @@
+package edu.fmi.ir.booksearch;
+
+public class JsonReader {
+	public List<Book> read(final String json) {
+
+	}
+}

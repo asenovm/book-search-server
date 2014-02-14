@@ -1,0 +1,22 @@
+package edu.fmi.ir.booksearch;
+
+import java.awt.print.Book;
+import java.util.LinkedList;
+import java.util.List;
+
+public class BookSearcher {
+
+	public void index(final String directoryPath) {
+		try {
+			final BookIndex index = new BookIndex();
+			index.indexDirectory(directoryPath);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+	}
+
+	public static void main(String[] args) {
+		final BookSearcher searcher = new BookSearcher();
+		searcher.index("books");
+	}
+}
