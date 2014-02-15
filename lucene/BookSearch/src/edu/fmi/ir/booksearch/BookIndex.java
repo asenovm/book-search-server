@@ -2,14 +2,8 @@ package edu.fmi.ir.booksearch;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
 
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
-import org.apache.lucene.document.Document;
-import org.apache.lucene.document.Field;
-import org.apache.lucene.document.TextField;
 import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
@@ -18,12 +12,11 @@ import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TopScoreDocCollector;
+import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.store.RAMDirectory;
 import org.apache.lucene.util.Version;
 import org.json.JSONArray;
 import org.json.JSONObject;
-
-import edu.fmi.ir.booksearch.model.Book;
 
 public class BookIndex {
 
@@ -31,40 +24,11 @@ public class BookIndex {
 
 	private static final String FIELD_CONTENT = "content";
 
-	private final List<Book> indexedBooks;
-
 	public BookIndex() throws IOException {
 		final RAMDirectory indexDirectory = new RAMDirectory();
 		final IndexWriterConfig config = new IndexWriterConfig(
 				Version.LUCENE_46, new StandardAnalyzer(Version.LUCENE_46));
 		writer = new IndexWriter(indexDirectory, config);
-		indexedBooks = new ArrayList<Book>();
-	}
-
-	public void index(final String title, final String bookPath) {
-		final Document document = new Document();
-		try {
-			final Scanner scanner = new Scanner(new File(bookPath));
-			final StringBuilder builder = new StringBuilder();
-			while (scanner.hasNextLine()) {
-				builder.append(scanner.nextLine());
-			}
-			document.add(new TextField(FIELD_CONTENT, builder.toString(),
-					Field.Store.YES));
-			writer.addDocument(document);
-			indexedBooks.add(new Book(title));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
-	public void indexDirectory(final String directoryPath) {
-		final File directory = new File(directoryPath);
-		final String[] filenames = directory.list();
-		for (final String filename : filenames) {
-			index(filename.substring(0, filename.lastIndexOf(".")),
-					directoryPath + File.separator + filename);
-		}
 	}
 
 	public JSONArray query(final String queryString) {
@@ -79,13 +43,14 @@ public class BookIndex {
 					10, true);
 
 			final IndexSearcher searcher = new IndexSearcher(
-					DirectoryReader.open(writer, false));
+					DirectoryReader.open(FSDirectory.open(new File(
+							"indexDirectory"))));
 			searcher.search(query, collector);
 
 			final ScoreDoc[] scoreDocs = collector.topDocs().scoreDocs;
 			for (final ScoreDoc doc : scoreDocs) {
 				final JSONObject docJson = new JSONObject();
-				docJson.put("title", indexedBooks.get(doc.doc));
+				docJson.put("title", "test");
 				docJson.put("relevance", doc.score);
 				result.put(docJson);
 			}
