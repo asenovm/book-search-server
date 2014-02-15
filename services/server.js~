@@ -44,7 +44,7 @@ app.post('/relevant', function (req, res) {
         var q = connection.query('INSERT INTO queries SET ?', post, function(err, result) {
             // Neat!
         });
-//        console.log(q.sql);    
+        console.log(q.sql);    
     } 
 
     res.send(200);
