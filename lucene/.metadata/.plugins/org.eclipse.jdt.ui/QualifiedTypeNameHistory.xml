@@ -4,4 +4,7 @@
 <fullyQualifiedTypeName name="org.json.JSONObject"/>
 <fullyQualifiedTypeName name="edu.fmi.ir.booksearch.BookIndex"/>
 <fullyQualifiedTypeName name="org.apache.lucene.store.FSDirectory"/>
+<fullyQualifiedTypeName name="org.apache.lucene.index.DirectoryReader"/>
+<fullyQualifiedTypeName name="org.apache.lucene.document.TextField"/>
+<fullyQualifiedTypeName name="org.apache.lucene.document.Field.Store"/>
 </qualifiedTypeNameHistroy>
