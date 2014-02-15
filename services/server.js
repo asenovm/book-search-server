@@ -1,3 +1,12 @@
+var mysql      = require('mysql');
+var connection = mysql.createConnection({
+    host     : 'localhost',
+    user     : 'root',
+    password : 'robco',
+    database : 'booksearch'
+});
+connection.connect();
+
 var express = require('express'),
     app = express(),
     child_process = require('child_process');
@@ -23,32 +32,28 @@ app.post('/search', function (req, res) {
     });
 });
 
-app.post('/relevant', function (req, res) {
-    var userId = req.body.userId,
-        bookTitle = req.body.book,
-        queryArray = req.body.query.split(' ');
-   
-    console.log(queryArray);
-
-    var mysql      = require('mysql');
-    var connection = mysql.createConnection({
-        host     : 'localhost',
-        user     : 'root',
-        password : 'robco',
-        database : 'booksearch'
-    });
-    
-    connection.connect();
-    for (index = 0; index < queryArray.length; ++index) {
-        var q = connection.query('SELECT * FROM queries WHERE `userid` = "??" AND `title` = "??" AND `token` = "?"', [userId, queryArray[index], bookTitle], function(err, results) {
+function callbackInsert(post) {
+    return function(err, results) {
+            console.log(results.length);
+            console.log(results)
             if (results.length == 0) {
-                var post  = {userid: userId, title: bookTitle, token: queryArray[index]};
                 var q = connection.query('INSERT INTO queries SET ?', post, function(err, result) {
                     // Neat!
                 });
                 console.log(q.sql);
             }
-        });
+           }
+}
+
+app.post('/relevant', function (req, res) {
+    var userId = req.body.userId,
+        bookTitle = req.body.book.substring(0, 64),
+        queryArray = req.body.query.split(' ');
+   
+    console.log(queryArray);
+    
+    for (index = 0; index < queryArray.length; ++index) {
+        var q = connection.query('SELECT * FROM queries WHERE `userid` = ? AND `title` = ? AND `token` = ?', [userId, queryArray[index], bookTitle], callbackInsert({userid: userId, title: bookTitle, token: queryArray[index]}));
         
         console.log(q.sql);    
     } 
