@@ -31,13 +31,47 @@ app.use(function (req, res, next) {
 
 app.post('/search', function (req, res) {
     console.log(req.body.q);
-    child_process.exec('java -jar ../search/search.jar ../search/indexDirectory "' + req.body.q + '"', function(err, stdout, stderr) {
-        if(err) {
-            res.send(500); 
-        } else {
-            res.send(stdout);
+    var tokens = req.body.q.split(' ');
+    var userId = req.body.userId;
+    var callbackCount = 0;
+    var result;
+    
+    var markedBooks = [];
+
+    for (index = 0; index < tokens.length; ++index) {
+        var q = connection.query('SELECT DISTINCT title FROM queries WHERE `userid` = ? AND `token` = ?', [userId, tokens[index]], function(err, result) {
+        ++callbackCount;
+        markedBooks = markedBooks.concat(result);
+        if(callbackCount === tokens.length) {
+            child_process.exec('java -jar ../search/search.jar ../search/indexDirectory "' + req.body.q + '"', function(err, stdout, stderr) {
+            if(err) {
+                res.send(500); 
+            } else {
+                markedBooks = markedBooks.map(function (item) {
+                    return item.title;
+                });
+
+                result = JSON.parse(stdout);
+                result.books.forEach(function (item) {
+                    if(markedBooks.indexOf(item.title) >= 0) {
+                        item.relevance = Math.min(item.relevance * 1.2, 1);
+                    }
+                });
+
+                result.books.sort(function (first, second) {
+                    return second.relevance - first.relevance;                
+                });
+
+                res.json(result);
+            }
+        });
         }
-    });
+        });
+        
+        console.log(q.sql);    
+    } 
+    
+    
 });
 
 function callbackInsert(post) {
@@ -55,7 +89,6 @@ function callbackInsert(post) {
 
 app.post('/relevant', function (req, res) {
     var userId = req.body.userId,
-<<<<<<< HEAD
         bookTitle = req.body.book.substring(0, 64),
         queryArray = req.body.query.split(' ');
    
@@ -65,22 +98,6 @@ app.post('/relevant', function (req, res) {
         var q = connection.query('SELECT * FROM queries WHERE `userid` = ? AND `title` = ? AND `token` = ?', [userId, queryArray[index], bookTitle], callbackInsert({userid: userId, title: bookTitle, token: queryArray[index]}));
         
         console.log(q.sql);    
-=======
-        bookTitle = req.body.book,
-        queryArray = req.body.query.split(' '),
-        index, post,
-        query = 'SELECT * FROM queries WHERE `userid` = "??" AND `title` = "??" AND `token` = "?"';
-   
-    for (index = 0; index < queryArray.length; ++index) {
-        connection.query(query, [userId, queryArray[index], bookTitle], function(err, results) {
-            if (results.length == 0) {
-                post  = {userid: userId, title: bookTitle, token: queryArray[index]};
-                connection.query('INSERT INTO queries SET ?', post, function(err, result) {
-                    // Neat!
-                });
-            }
-        });
->>>>>>> 5986176de603bfec9e2405c65d431efae18dfe80
     } 
 });
 
@@ -88,7 +105,7 @@ app.get('/relevant', function (req, res) {
     var userId = req.body.userId,
         bookTitle = req.body.book,
         queryArray = req.body.query.split(' '),
-        query = 'SELECT * FROM queries WHERE `userid` = "??" AND `title` = "??" AND `token` = "?"',
+        query = 'SELECT * FROM queries WHERE `userid` = ? AND `title` = ? AND `token` = ?',
         callbackCount = 0;
    
     for (index = 0; index < queryArray.length; ++index) {
