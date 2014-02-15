@@ -23,7 +23,7 @@ app.use(function (req, res, next) {
 
 app.post('/search', function (req, res) {
     console.log(req.body.q);
-    child_process.exec('java -jar ../search/search.jar ../search/books ' + req.body.q, function(err, stdout, stderr) {
+    child_process.exec('java -jar ../search/search.jar ' + req.body.q, function(err, stdout, stderr) {
         if(err) {
             res.send(500); 
         } else {

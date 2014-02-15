@@ -9,9 +9,8 @@ public class BookSearcher {
 
 	private BookIndex index;
 
-	public void index(final String directoryPath) throws IOException {
+	public BookSearcher() throws IOException {
 		index = new BookIndex();
-		index.indexDirectory(directoryPath);
 	}
 
 	public String query(final String query) {
@@ -23,7 +22,6 @@ public class BookSearcher {
 
 	public static void main(String[] args) throws IOException {
 		final BookSearcher searcher = new BookSearcher();
-		searcher.index(args[0]);
-		System.out.println(searcher.query(args[1]));
+		System.out.println(searcher.query(args[0]));
 	}
 }

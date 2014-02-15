@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Copy 4 elements to &apos;libs&apos;&#x0A;- Original project: &apos;BookSearch&apos;&#x0A;- Destination element: &apos;libs&apos;&#x0A;- Original elements:&#x0A;     lucene-queryparser-4.6.1.jar&#x0A;     lucene-analyzers-common-4.6.1.jar&#x0A;     lucene-core-4.6.1.jar&#x0A;     json-20131018.jar" description="Copy files" element1="libs/lucene-queryparser-4.6.1.jar" element2="libs/lucene-analyzers-common-4.6.1.jar" element3="libs/lucene-core-4.6.1.jar" element4="libs/json-20131018.jar" files="4" flags="589830" folders="0" id="org.eclipse.jdt.ui.copy" policy="org.eclipse.jdt.ui.copyResources" stamp="1392435713734" target="/BookIndex/libs" units="0" version="1.0"/>
+</session>
