@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <typeInfoHistroy>
-<typeInfo handle="=BookSearch/src&lt;edu.fmi.ir.booksearch{BookSearcher.java[BookSearcher" modifiers="1" timestamp="1392345890000"/>
-<typeInfo handle="=BookSearch/src&lt;edu.fmi.ir.booksearch{BookIndex.java[BookIndex" modifiers="1" timestamp="1392345993000"/>
+<typeInfo handle="=BookIndex/src&lt;edu.fmi.ir.bookindex{BookIndex.java[BookIndex" modifiers="1" timestamp="1392437163000"/>
+<typeInfo handle="=BookSearch/src&lt;edu.fmi.ir.booksearch{BookSearcher.java[BookSearcher" modifiers="1" timestamp="1392436120000"/>
+<typeInfo handle="=BookSearch/src&lt;edu.fmi.ir.booksearch{BookIndex.java[BookIndex" modifiers="1" timestamp="1392437286000"/>
 </typeInfoHistroy>

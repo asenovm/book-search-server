@@ -19,6 +19,8 @@ public class BookIndex {
 
 	private static final String FIELD_CONTENT = "content";
 
+	private static final String FIELD_TITLE = "title";
+
 	public BookIndex() throws IOException {
 		final FSDirectory indexDirectory = FSDirectory.open(new File(
 				"indexDirectory"));
@@ -37,6 +39,7 @@ public class BookIndex {
 			}
 			document.add(new TextField(FIELD_CONTENT, builder.toString(),
 					Field.Store.YES));
+			document.add(new TextField(FIELD_TITLE, title, Field.Store.YES));
 			writer.addDocument(document);
 		} catch (IOException e) {
 			e.printStackTrace();

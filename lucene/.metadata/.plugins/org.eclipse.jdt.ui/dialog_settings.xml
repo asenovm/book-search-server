@@ -15,6 +15,7 @@
 		<item value="1" key="FatJarPackageWizardPage.LIBRARY_HANDLING"/>
 		<list key="FatJarPackageWizardPage.DESTINATION_NAMES_ID">
 			<item value="/home/martin/workspace/book-search-server/search/search.jar"/>
+			<item value="/home/martin/workspace/book-search-server/search/index.jar"/>
 			<item value="BookSearch/search.jar"/>
 			<item value="/home/martin/Desktop/search.jar"/>
 		</list>
@@ -31,8 +32,8 @@
 		<section name="DialogBoundsSettings">
 			<item value="600" key="DIALOG_WIDTH"/>
 			<item value="53" key="DIALOG_Y_ORIGIN"/>
-			<item value="351" key="DIALOG_X_ORIGIN"/>
 			<item value="500" key="DIALOG_HEIGHT"/>
+			<item value="351" key="DIALOG_X_ORIGIN"/>
 			<item value="1|Ubuntu|11.0|0|GTK|1|" key="DIALOG_FONT_NAME"/>
 		</section>
 	</section>
