@@ -50,4 +50,9 @@ app.post('/relevant', function (req, res) {
     res.send(200);
 });
 
+app.get('/relevant', function (req, res) {
+    
+    res.send(200);
+});
+
 app.listen(8080);
