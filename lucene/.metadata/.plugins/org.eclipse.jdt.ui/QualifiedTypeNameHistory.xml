@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<qualifiedTypeNameHistroy>
+<fullyQualifiedTypeName name="org.json.JSONArray"/>
+<fullyQualifiedTypeName name="org.json.JSONObject"/>
+<fullyQualifiedTypeName name="edu.fmi.ir.booksearch.BookIndex"/>
+<fullyQualifiedTypeName name="org.apache.lucene.store.FSDirectory"/>
+</qualifiedTypeNameHistroy>

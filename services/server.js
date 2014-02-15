@@ -23,4 +23,11 @@ app.post('/search', function (req, res) {
     });
 });
 
+app.post('/relevant', function (req, res) {
+    var userId = req.body.userId,
+        bookTitle = req.body.book;
+
+    res.send(200);
+});
+
 app.listen(8080);
